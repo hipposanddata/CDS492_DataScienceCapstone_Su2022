@@ -1,0 +1,200 @@
+---
+title: "Capstone Project"
+author: "Oliver Yu"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#Oliver Yu 
+#CDS 492: Data Science Capstone (Summer 2022)
+#George Mason University 
+
+#Importing libraries 
+
+suppressPackageStartupMessages(library(tidyverse)) 
+
+suppressPackageStartupMessages(library(broom))
+
+suppressPackageStartupMessages(library(modelr))
+
+suppressPackageStartupMessages(library(plotly))
+```
+
+```{r}
+#Importing Dataset 
+
+forestfires <- read.csv("forestfires.csv")
+```
+
+```{r}
+forest_var <- forestfires %>%
+  select(X, FFMC, DMC, DC, ISI, temp, RH, wind, rain, area) %>%
+  rename("Xcoord" = "X" )
+```
+
+```{r}
+#FFMC Summary Statistics 
+
+forest_FFMC <- forest_var %>%
+  group_by(Xcoord) %>%
+  summarize(
+    s_obs = n(),
+    s_mean = mean(FFMC, na.rm = TRUE),
+    s_median = median(FFMC, na.rm = TRUE),
+    std_dev = sd(FFMC, na.rm = TRUE),
+    IQR = IQR(FFMC, na.rm = TRUE),
+    min_val = min(FFMC, na.rm = TRUE), 
+    max_val = max(FFMC, na.rm = TRUE)
+  )
+
+```
+
+```{r}
+#DMC Summary Statistics 
+
+forest_DMC <- forest_var %>%
+  group_by(Xcoord) %>%
+  summarize(
+    s_obs = n(),
+    s_mean = mean(DMC, na.rm = TRUE),
+    s_median = median(DMC, na.rm = TRUE),
+    std_dev = sd(DMC, na.rm = TRUE),
+    IQR = IQR(DMC, na.rm = TRUE),
+    min_val = min(DMC, na.rm = TRUE), 
+    max_val = max(DMC, na.rm = TRUE)
+  )
+
+forest_DMC
+```
+
+```{r}
+#DC Summary Statistics 
+
+forest_DC <- forest_var %>%
+  group_by(Xcoord) %>%
+  summarize(
+    s_obs = n(),
+    s_mean = mean(DC, na.rm = TRUE),
+    s_median = median(DC, na.rm = TRUE),
+    std_dev = sd(DC, na.rm = TRUE),
+    IQR = IQR(DC, na.rm = TRUE),
+    min_val = min(DC, na.rm = TRUE), 
+    max_val = max(DC, na.rm = TRUE)
+  )
+
+forest_DC
+```
+
+```{r}
+#ISI Summary Statistics 
+
+forest_ISI <- forest_var %>%
+  group_by(Xcoord) %>%
+  summarize(
+    s_obs = n(),
+    s_mean = mean(ISI, na.rm = TRUE),
+    s_median = median(ISI, na.rm = TRUE),
+    std_dev = sd(ISI, na.rm = TRUE),
+    IQR = IQR(ISI, na.rm = TRUE),
+    min_val = min(ISI, na.rm = TRUE), 
+    max_val = max(ISI, na.rm = TRUE)
+  )
+
+forest_ISI
+```
+
+```{r}
+#Temp Summary Statistics 
+
+forest_temp <- forest_var %>%
+  group_by(Xcoord) %>%
+  summarize(
+    s_obs = n(),
+    s_mean = mean(temp, na.rm = TRUE),
+    s_median = median(temp, na.rm = TRUE),
+    std_dev = sd(temp, na.rm = TRUE),
+    IQR = IQR(temp, na.rm = TRUE),
+    min_val = min(temp, na.rm = TRUE), 
+    max_val = max(temp, na.rm = TRUE)
+  )
+
+forest_temp
+```
+
+```{r}
+#Relative Humidity Summary Statistics 
+
+forest_RH <- forest_var %>%
+  group_by(Xcoord) %>%
+  summarize(
+    s_obs = n(),
+    s_mean = mean(RH, na.rm = TRUE),
+    s_median = median(RH, na.rm = TRUE),
+    std_dev = sd(RH, na.rm = TRUE),
+    IQR = IQR(RH, na.rm = TRUE),
+    min_val = min(RH, na.rm = TRUE), 
+    max_val = max(RH, na.rm = TRUE)
+  )
+
+forest_RH
+```
+
+```{r}
+#Wind Speed Summary Statistics 
+
+forest_wind <- forest_var %>%
+  group_by(Xcoord) %>%
+  summarize(
+    s_obs = n(),
+    s_mean = mean(wind, na.rm = TRUE),
+    s_median = median(wind, na.rm = TRUE),
+    std_dev = sd(wind, na.rm = TRUE),
+    IQR = IQR(wind, na.rm = TRUE),
+    min_val = min(wind, na.rm = TRUE), 
+    max_val = max(wind, na.rm = TRUE)
+  )
+
+forest_wind
+```
+\pagebreak 
+
+```{r}
+#Rain Summary Statistics 
+
+forest_rain <- forest_var %>%
+  group_by(Xcoord) %>%
+  summarize(
+    s_obs = n(),
+    s_mean = mean(rain, na.rm = TRUE),
+    s_median = median(rain, na.rm = TRUE),
+    std_dev = sd(rain, na.rm = TRUE),
+    IQR = IQR(rain, na.rm = TRUE),
+    min_val = min(rain, na.rm = TRUE), 
+    max_val = max(rain, na.rm = TRUE)
+  )
+
+forest_rain
+```
+\pagebreak 
+
+```{r}
+forest_area <- forest_var %>%
+  group_by(Xcoord) %>%
+  summarize(
+    s_obs = n(),
+    s_mean = mean(area, na.rm = TRUE),
+    s_median = median(area, na.rm = TRUE),
+    std_dev = sd(area, na.rm = TRUE),
+    IQR = IQR(area, na.rm = TRUE),
+    min_val = min(area, na.rm = TRUE), 
+    max_val = max(area, na.rm = TRUE)
+  )
+
+forest_area
+```
+
+
