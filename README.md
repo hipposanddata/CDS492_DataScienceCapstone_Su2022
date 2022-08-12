@@ -20,19 +20,8 @@ https://archive.ics.uci.edu/ml/datasets/forest+fires
 
 ## Additional Project Information 
 
+References can be found in Working Paper 
+
 Project created for CDS 492: Data Science Capstone (Summer 2022) / Department of Computational and Data Sciences 
 at George Mason University 
-
-# References 
-
-Center, N. I. (N/a, N/a N/a). Suppression Costs . Retrieved from Fire Information and Statistics : https://www.nifc.gov/fire-information/statistics/suppression-costs
-Cominique, M. (2019). Wildfires Modelling: Short Overview, Challenges, and Perspectives . Journal of the Combustion Society of Japan , 120-125.
-Huber, K. (2018). Resilence Strategies for Wildfire. Center for Climate and Energy Solutions , 1-12.
-Kubara, K. (2020). Gaussian Mixture Models vs K-Means. Which One to Choose? Amsterdam: Towards Data Science.
-Learn, S. (2022, N/a N/a). 2.1 Gaussian Mixture Models . Retrieved from Scikit Learn: https://scikit-learn.org/stable/modules/mixture.html
-Paulo Cortez, A. M. (2007). A Data Mining Approach to Predict Forest Fires using Meteorological Data . Guimarães, Portugal: Portuguese Conference on Artifical Intelligence .
-Qianqian Cao, L. Z. (2021). Comparing four regression techniques to explore factors governing the number of forest fires in Southeast, China. Geomatics, Natural Hazards, and Risk, 499 - 521.
-Rylan Perumal, T. L. (2020). Comparison of Recurrent Neural Network Architectures for Wildfire Spread Modelling . Institute of Electrical and Electronics Engineers , 1-6.
-Samriddhi Singla, A. M. (2021). WildfireDB: An Open-Source Dataset Connecting Wildfire Spread with Relevant Determinants. 35th Conference on Neural Information Processing Systems , 2-10.
-Ulrich Bodenhofer, J. P. (2022). APCluster: An R Package for Affinity Propagation Clustering . Linz, Austria : Institute of Bioinformatics, Johannes Kepler University .
 
