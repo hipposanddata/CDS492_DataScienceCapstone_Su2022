@@ -13,6 +13,8 @@ knitr::opts_chunk$set(echo = TRUE)
 #CDS 492: Data Science Capstone (Summer 2022)
 #George Mason University 
 
+#NOTE: DO NOT KNIT THIS RMARKDOWN FILE -> To Run Program / Use the "Run All" function in R. 
+
 #Importing libraries 
 
 suppressPackageStartupMessages(library(tidyverse)) 
@@ -22,25 +24,49 @@ suppressPackageStartupMessages(library(broom))
 suppressPackageStartupMessages(library(modelr))
 
 suppressPackageStartupMessages(library(plotly))
+
+suppressPackageStartupMessages(library(factoextra))
+
+suppressPackageStartupMessages(library(corrr))
+
+suppressPackageStartupMessages(library(DataExplorer))
+
+suppressPackageStartupMessages(library(corrplot))
+
+suppressPackageStartupMessages(library(cluster))
+
+
 ```
 
 ```{r}
-#Importing Dataset 
+#Preprocessing and Data Import 
 
-forestfires <- read.csv("forestfires.csv")
+forest_fires <- read.csv("forestfires.csv") %>%
+  select(X, FFMC, DMC, DC, ISI, temp, RH, wind, rain, area) #importing dataset
+
+
+write.csv(forest_fires, "nonscaled_firedata.csv") #labeling scaled and not scaled data 
+forest_var <- forest_fires
+
+scaled_data <- data.frame(df <- scale(forest_var)) #scaling dataset 
+write.csv(forest_fires, "scaled_firedata.csv") #rewriting it to main repo for documentation.
 ```
 
 ```{r}
-forest_var <- forestfires %>%
-  select(X, FFMC, DMC, DC, ISI, temp, RH, wind, rain, area) %>%
-  rename("Xcoord" = "X" )
-```
+#Exploratory Data Analysis (EDA) (focusing on data structure)
 
-```{r}
+plot_str(forest_fires) #looking for data types 
+plot_intro(forest_fires) #looking for data characteristics and missing values 
+plot_missing(forest_fires) #double checking for missing values 
+
+
+
+#Exploratory Data Analysis (EDA) (focusing on data content)
+
 #FFMC Summary Statistics 
 
 forest_FFMC <- forest_var %>%
-  group_by(Xcoord) %>%
+  group_by(X) %>%
   summarize(
     s_obs = n(),
     s_mean = mean(FFMC, na.rm = TRUE),
@@ -50,14 +76,12 @@ forest_FFMC <- forest_var %>%
     min_val = min(FFMC, na.rm = TRUE), 
     max_val = max(FFMC, na.rm = TRUE)
   )
+forest_FFMC
 
-```
-
-```{r}
 #DMC Summary Statistics 
 
 forest_DMC <- forest_var %>%
-  group_by(Xcoord) %>%
+  group_by(X) %>%
   summarize(
     s_obs = n(),
     s_mean = mean(DMC, na.rm = TRUE),
@@ -67,15 +91,12 @@ forest_DMC <- forest_var %>%
     min_val = min(DMC, na.rm = TRUE), 
     max_val = max(DMC, na.rm = TRUE)
   )
-
 forest_DMC
-```
 
-```{r}
 #DC Summary Statistics 
 
 forest_DC <- forest_var %>%
-  group_by(Xcoord) %>%
+  group_by(X) %>%
   summarize(
     s_obs = n(),
     s_mean = mean(DC, na.rm = TRUE),
@@ -85,15 +106,12 @@ forest_DC <- forest_var %>%
     min_val = min(DC, na.rm = TRUE), 
     max_val = max(DC, na.rm = TRUE)
   )
-
 forest_DC
-```
 
-```{r}
 #ISI Summary Statistics 
 
 forest_ISI <- forest_var %>%
-  group_by(Xcoord) %>%
+  group_by(X) %>%
   summarize(
     s_obs = n(),
     s_mean = mean(ISI, na.rm = TRUE),
@@ -103,15 +121,12 @@ forest_ISI <- forest_var %>%
     min_val = min(ISI, na.rm = TRUE), 
     max_val = max(ISI, na.rm = TRUE)
   )
-
 forest_ISI
-```
 
-```{r}
 #Temp Summary Statistics 
 
 forest_temp <- forest_var %>%
-  group_by(Xcoord) %>%
+  group_by(X) %>%
   summarize(
     s_obs = n(),
     s_mean = mean(temp, na.rm = TRUE),
@@ -121,15 +136,12 @@ forest_temp <- forest_var %>%
     min_val = min(temp, na.rm = TRUE), 
     max_val = max(temp, na.rm = TRUE)
   )
-
 forest_temp
-```
 
-```{r}
 #Relative Humidity Summary Statistics 
 
 forest_RH <- forest_var %>%
-  group_by(Xcoord) %>%
+  group_by(X) %>%
   summarize(
     s_obs = n(),
     s_mean = mean(RH, na.rm = TRUE),
@@ -139,15 +151,12 @@ forest_RH <- forest_var %>%
     min_val = min(RH, na.rm = TRUE), 
     max_val = max(RH, na.rm = TRUE)
   )
-
 forest_RH
-```
 
-```{r}
 #Wind Speed Summary Statistics 
 
 forest_wind <- forest_var %>%
-  group_by(Xcoord) %>%
+  group_by(X) %>%
   summarize(
     s_obs = n(),
     s_mean = mean(wind, na.rm = TRUE),
@@ -157,16 +166,12 @@ forest_wind <- forest_var %>%
     min_val = min(wind, na.rm = TRUE), 
     max_val = max(wind, na.rm = TRUE)
   )
-
 forest_wind
-```
-\pagebreak 
 
-```{r}
 #Rain Summary Statistics 
 
 forest_rain <- forest_var %>%
-  group_by(Xcoord) %>%
+  group_by(X) %>%
   summarize(
     s_obs = n(),
     s_mean = mean(rain, na.rm = TRUE),
@@ -176,14 +181,10 @@ forest_rain <- forest_var %>%
     min_val = min(rain, na.rm = TRUE), 
     max_val = max(rain, na.rm = TRUE)
   )
-
 forest_rain
-```
-\pagebreak 
 
-```{r}
 forest_area <- forest_var %>%
-  group_by(Xcoord) %>%
+  group_by(X) %>%
   summarize(
     s_obs = n(),
     s_mean = mean(area, na.rm = TRUE),
@@ -193,8 +194,85 @@ forest_area <- forest_var %>%
     min_val = min(area, na.rm = TRUE), 
     max_val = max(area, na.rm = TRUE)
   )
-
 forest_area
+
+#Visualizations 
+
+densityHeatmap(df, #figure 11 
+               title = "Density Heatmap for all Variables of Interest", 
+               ylab = "density distributions")
+
+A <- scaled_data %>% #figure 12 
+  pivot_longer(
+    cols = FFMC | DMC | DC | ISI | temp | RH | wind | rain | area, 
+    names_to = "names", 
+    values_to = "values"
+  )
+
+correlatedboxes <- cor(scaled_data) #correlation plot
+corrplot(correlatedboxes, method = 'number')
+
+ggplot(data = A) + #created multiple histogram plots of variables / figure 
+  geom_histogram( mapping = aes( x = values)) + 
+  facet_wrap(~names) + 
+  labs(
+    title = "Distribution of all Variables of Interest"
+  )
+
+
+
 ```
+
+
+```{r}
+# K-means clustering 
+
+forest_fires <- read.csv("forestfires.csv") %>%
+  select(FFMC, DMC, DC, ISI, temp, RH, wind, rain) #importing dataset
+write.csv(df, "nonscaled_firedata.csv") #labeling scaled and not scaled data 
+
+scaled_data <- data.frame(df <- scale(forest_fires)) #scaling dataset 
+write.csv(forest_fires, "scaled_firedata.csv") #rewriting it to main repo for documentation.
+
+fviz_nbclust(scaled_data, kmeans, method = "wss")  #using elbow method to find optimal number of clusters 
+
+fviz_nbclust(scaled_data, kmeans, method = "silhouette")
+
+Fireclusters <- kmeans(scaled_data, 3) #running k-means with scaled data
+Fireclusters
+
+
+fviz_cluster(Fireclusters, scaled_data)
+
+#another clustering representation for k-means using cluster library
+
+cluster2 <- kmeans (scaled_data, 3)
+cluster2
+
+scaled_data$cluster <- cluster2$cluster
+head(scaled_data, 6) 
+
+clusplot(scaled_data, scaled_data$cluster, 
+         main = "K-means Clustering of Scaled Forest Fires Data (method 2) (k=3)",
+         color = TRUE,
+         shade = FALSE,
+         labels = 2,
+         lines = 2)
+
+#validation 
+
+require("cluster")
+
+group1 <- silhouette(Fireclusters$cluster, dist(scaled_data))
+fviz_silhouette(group1)
+
+group2 <- silhouette(scaled_data$cluster, dist(scaled_data))
+fviz_silhouette(group2)
+```
+
+
+
+
+
 
 
