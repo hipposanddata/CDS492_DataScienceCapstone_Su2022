@@ -12,7 +12,7 @@ This repository is intended for CDS 492: Data Science Capstone at George Mason U
 
 ## Access to Working Paper
 
-insert published google drive link to PDF document here 
+https://drive.google.com/file/d/1-HNc_4lSl4-ObOGTJDuhOrzfoPXevnz4/view?usp=sharing
 
 ## Access to Dataset
 
